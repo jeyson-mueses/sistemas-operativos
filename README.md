@@ -7,7 +7,7 @@ Crear un script que contenga 5 funciones para automatizar el SO de Linux
 - Luego todas las funciones deberan unirse en un solo archivo
 - Para este caso el archivo principal es index.sh
 
-- Autores:
+### Autores:
 - Julian Solorzano
 - Josue Cruz
 - Valentino Vargas
