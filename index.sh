@@ -7,7 +7,7 @@ REPORTE="/ruta/reporte.txt"
 EMAIL="usuario@example.com"
 
 
-##### 1. Funcion: Limpiar Temporales - Juliàn Solòrzano
+##### 1. Función: Limpiar Temporales - Julián Solórzano
 
 # Limpiar archivos temporales en Ubuntu
 echo "Inicio de la limpieza de archivos temporales..."
@@ -36,7 +36,7 @@ sync; sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
 echo "Limpieza completada con éxito."
 
 
-##### 2. Funcion: Actualizar Sistema - Valentino Vargas
+##### 2. Función: Actualizar Sistema - Valentino Vargas
 
 # Función para actualizar los paquetes del sistema
 actualizar_sistema() {
@@ -113,16 +113,21 @@ main() {
 main
 
 
-##### 3. Funcion: Sincronizar Archivos
+##### 3. Función: Sincronizar Archivos
+
+sincronizar_archivos() {
+    echo "Iniciando sincronización de archivos desde $ORIGEN a $DESTINO..."
+    rsync -avh --delete "$ORIGEN/" "$DESTINO/"
+    if [ $? -eq 0 ]; then
+        echo "Sincronización completada con éxito."
+    else
+        echo "Error durante la sincronización de archivos."
+    fi
+}
 
 
+##### 4. Función: Programar Tareas - Josué Cruz
 
-
-
-
-
-
-##### 4. Funcion: Programar Tareas - Josue Cruz
 # Nombre del archivo de log
 LOG_FILE="$HOME/tareas_diarias.log"
 
@@ -173,7 +178,28 @@ echo "Registro de actividades recientes:"
 tail -n 10 $LOG_FILE
 
 
+##### 5. Función: Enviar Reporte - Jeyson Mueses
 
+enviar_reporte() {
+    echo "Generando reporte en $REPORTE..."
+    echo "Reporte generado el $(date '+%Y-%m-%d %H:%M:%S')" > $REPORTE
+    echo "Estado del sistema:" >> $REPORTE
+    df -h >> $REPORTE
+    echo "" >> $REPORTE
+    echo "Últimas actualizaciones:" >> $REPORTE
+    grep "upgraded" /var/log/apt/history.log | tail -n 5 >> $REPORTE
+    echo "" >> $REPORTE
+    echo "Registro de tareas diarias:" >> $REPORTE
+    tail -n 10 $LOG_FILE >> $REPORTE
 
+    echo "Enviando reporte por correo electrónico a $EMAIL..."
+    mail -s "Reporte del Sistema" $EMAIL < $REPORTE
+    if [ $? -eq 0 ]; then
+        echo "Reporte enviado con éxito."
+    else
+        echo "Error al enviar el reporte."
+    fi
+}
 
-##### 5. Funcion: Enviar Reporte - Jeyson Mueses
+# Llamada a la función para enviar el reporte
+enviar_reporte
